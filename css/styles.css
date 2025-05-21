@@ -1,0 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/*wczytanie zewnętrznej czcionki pochodzącej z Google Fonts*/
+
+*{ /* gwiazda oznacza wszystkie elementy */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*powoduje wliczanie marginesów wewnętrznych oraz obramowania w rozmiary elementu*/
+    scroll-behavior: smooth;
+    /*powoduje dodanie płynnego przewijania strony po kliknięciu linku z menu. Przedrostek -webkij dla przeglądarek chrome i safari*/
+    -webkit-scroll-behavior: smooth;
+    font-family: "Poppins", sans-serif;
+    /*ustawienie czcionki na Poppins, jeżeli nie będzie dostępna to zostanie użyta czcionka domyślna*/
+}
+:root{ /* root zmienia wszystkie elementy w dokumencie, różni się od * tym, że nie zmienia elementów w iframe, natomiast iframe to jest element HTML, który pozwala na osadzenie innej strony w aktualnej stronie*/
+    --header-height: 100px;
+    --clr-graylight: #cfd8dc;
+    --clr-graymed: #90a4ae;
+
+    --radius: 10em;
+
+    --animation-curve: cubic-bezier(0.34, 1.36, 0.2, 1);
+}
+
+header{
+    height: var(--header-height);
+    background: #ccc;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+}
+
+header .logo{
+    flex: 2;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header.logo img{
+    height: 70px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+header nav{
+    flex: 6; /* ustawia szerokość elementu na 6/12 szerokości całego nagłówka */
+    height: 100%; /* ustawia wysokość elementu na 100% wysokości nagłówka */
+    display: flex; /* ustawia element jako flexbox */
+    justify-content: center; /* ustawia elementy w poziomie na środku */
+    align-items: center; /* ustawia elementy w pionie na środku */
+    width: 100%; /* ustawia szerokość elementu na 100% */
+}
+
+header nav a{
+    flex: 1; /* ustawia szerokość elementu na 1/12 szerokości całego nagłówka */
+    text-align: center; /* ustawia tekst na środku */
+    height: 100%; /* ustawia wysokość elementu na 100% wysokości nagłówka */
+    display: flex; /* ustawia element jako flexbox */
+    justify-content: center; /* ustawia elementy w poziomie na środku */
+    align-items: center; /* ustawia elementy w pionie na środku */
+    color: #000; /* ustawia kolor tekstu na czarny */
+    text-decoration: none; /* ustawia brak podkreślenia tekstu */
+    text-transform: uppercase; /* ustawia tekst na wielkie litery */
+    transition: 0.7s; /* ustawia czas przejścia na 0.7s */
+}
+
+header nav a:hover{
+    background: #c00; /* ustawia kolor tła na czerwony */
+    color: #fff; /* ustawia kolor tekstu na biały */
+}
+
+header .tryb{
+    flex: 1;/*ustawia szerokość elementu na 1/12 szerokości całego nagłówka*/
+    height: 100%;/*ustawia wysokość elementu na 100% wysokości nagłówka*/
+    display: flex;/*wyświetla element jako flex*/
+    justify-content: center;/*wyrównuje element do środka nagłówka*/
+    align-items: center;/*wyrównuje element do środka nagłówka*/
+    color: #000;/*ustawia kolor tekstu na czarny*/
+    gap: 10px;/*ustawia odległości pomiędzy elementami flexa*/
+}
+
+header .tryb i{
+    font-size: 1.25rem; /*ustawia rozmiar czcionki na 1.25rem*/
+}
+
+header .social{
+    flex:1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+}
+
+header .social i{
+    font-size: 1.25rem;
+}
+
+header .social a{
+    color:#000;
+    transition: 0.7s;
+}
+
+header .social a:hover i.fa-square-facebook{
+    color:#00f;
+}
+
+header .social a:hover i.fa-youtube{
+    color:#c00;
+}
+
+footer{
+    min-height: 200px;
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer .stopka{
+    width: 180px;
+    height: auto;
+    flex-direction: column;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.container{
+    display: flex;
+    gap: 30px;
+}
+
+.tools-section{
+    height: 700px;
+    width: 250px;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+}
+
+.tools-section h2{
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    color: #333;
+    text-align: center;
+}
+
+.tools-section label{
+    display: block;
+    margin-bottom: 5px;
+}
+
+.tools-section input[type="number"]{
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.tools-section button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    border: none;
+    background-color: rgb(0, 169, 0);
+    color: #fff;
+    font-size: 1rem;
+    cursor: url(/css/cur/cursor.cur), auto;
+}
+
+.tools-section button:hover{
+    background-color: rgb(0, 255, 0);
+    transition: 0.5s;
+}
+
+.switch-container{
+    width: 69%;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: var(--radius);
+    box-shadow: 5px 5px 15px 5px var(--clr-graylight);
+    position: relative;
+}
+
+.switch-color-right{
+    width: 50%;
+    height: 100%;
+    left: 0%;
+    top: 0%;;
+    background: rgb(10, 152, 79);
+    position: absolute;
+    z-index: 1;
+    border-radius: 10em 0px 0px 10em;
+}
+
+.switch-color-left{
+    width: 50%;
+    height: 100%;
+    left: 50%;
+    top: 0%;;
+    background: rgb(245, 103, 176);
+    position: absolute;
+    z-index: 1;
+    border-radius: 0em 10em 10em 0em;
+}
+
+.switch-container label{
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 10%;
+    left: 20px;
+    border-radius: var(--radius);
+    z-index: 99;
+    cursor: pointer;
+}
+
+.switch-container label::before{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900; /* font-weight 900 oznacza, że czcionka jest pogrubiona */
+    font-size: 1.7rem;
+    content: "\f304";
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    color: black;
+}
+
+.switch-container label::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900; /* font-weight 900 oznacza, że czcionka jest pogrubiona */
+    font-size: 30px;
+    content: "\f12d";
+    position: absolute;
+    left: 2px;
+    top: 3px;
+    opacity: 0;
+    color: black;
+}
+
+#switch:checked ~ label::before{
+    opacity: 0;
+}
+
+#switch:checked ~ label::after{
+    opacity: 1;
+}
+
+#switch:checked ~ label{
+    left: calc(100% - 60px);
+}
+
+#switch ~ label{
+    transition: all 0.7s var(--animation-curve);
+}
+
+.switch-container input{
+    display: none;
+}
+
+/* Siatka */
+.grid-section{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.grid{
+    display: grid;
+    gap: 1px;
+    /*background-image: url(img/grass.jpg);*/
+}
+
+#grid{
+    user-select: none;
+}
+
+.cell {
+    width: 40px;
+    height: 40px;
+    background-image: url(img/grass.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    user-select: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.header-cell {
+    background-color: green;
+    border: 1px solid black;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    user-select: none;
+}
+
+.cell.active {
+    /*background-color: pink !important;*/
+    background-image: url(img/cobblestone.png) !important;
+}
+
+.cell.preview {
+    background-color: rgba(0, 13, 255, 0.5) !important;
+    background-image: none !important;
+}
+
+#coordinates {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    min-height: 1.5em;
+}

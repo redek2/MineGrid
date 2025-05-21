@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tytuł dokumentu (max 60 zzs)</title>
+        <meta name="descripton" content="Opis dokumentu (max 150 zzs)">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /><!--Pobranie czcionki fontawesome-->
+    </head>
+    <body onload="generateGrid()">
+        <header>
+            <div class="logo">
+                <a href="index.html">
+                    <img src="css/img/grass.jpg" alt="Logo" width="70px" height="70px">
+                </a> <!-- Link do strony głównej -->
+            </div>
+            <nav>
+                <!-- Odnośniki na zasadzie kotwicy, kierujące do odpowiedniego miejsca w dokumencie oznaczonego tą samą nazwą dla parametru id -->
+                 <a href="#">Start</a>
+                 <a href="#o-nas">O nas</a>
+                 <a href="#cos">Coś innego</a>
+                 <a href="#kontakt">Kontakt</a>
+            </nav>
+            <div class="tryb">
+                <i class="fa-solid fa-sun"></i>
+                <i class="fa-solid fa-moon"></i>
+            </div>
+            <div class="social">
+                <a href="https://www.facebook.com/groups/317447829579979/" target="_blank"><!--parametr target z wartością _blank powoduje otwarcie linku w nowej zakładce przeglądarki-->
+                    <i class="fa-brands fa-square-facebook"></i>
+                </a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+            </div>
+        </header>
+
+        <h1 style="text-align: center;">Generator siatki</h1>
+
+        <div class="container">
+            <!-- Sekcja narzędzi -->
+             <div class="tools-section">
+                <h2>Ustawienia siatki</h2>
+                <label for="rows">Liczba wierszy:</label>
+                <input type="number" id="rows" min="1" max="100" value="15">
+                <label for="cols">Liczba kolumn:</label>
+                <input type="number" id="cols" min="1" max="100" value="15">
+                <button id="generate">Generuj siatkę</button>
+                <button id="reset">Reset</button>
+
+                <h2>Narzędzia</h2>
+                <div class="switch-container">
+                    <input type="checkbox" id="switch">
+                    <div style="width:2px; height:100%; z-index: 10; background:#000; position:absolute; left:50%; top:0; transform:translateX(-50%);"></div>
+                    <div class="switch-color-right"></div>
+                    <div class="switch-color-left"></div>
+                    <label for="switch"></label>
+                </div>
+                <div style="height: 20px; width: 100%;"></div>
+                <label>
+                    <input type="radio" name="tool" value="cursor" checked>
+                    Kursor
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="brush">
+                    Pędzel
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="rectangle">
+                    Prostokąt
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="rectangle-filled">
+                    Prostokąt wypełniony
+                </label>
+                <label style="text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-style: none; text-decoration-color: darkred;">
+                    <input type="radio" name="tool" value="circle" disabled>
+                    Okrąg
+                </label>
+                <label style="text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-style: none; text-decoration-color: darkred;">
+                    <input type="radio" name="tool" value="circle-filled" disabled>
+                    Koło
+                </label>
+
+                <p id="coordinates"></p>
+             </div>
+
+             <!-- Sekcja siatki -->
+              <div class="grid-section">
+                <div id="grid" class="grid"></div>
+              </div>
+        </div>
+
+        <div style="height: 1000px; background-color: yellowgreen;"></div>
+
+        <footer>
+            <div class="stopka">Stopka</div>
+            <div class="stopka">Stopka</div>
+            <div class="stopka">Stopka</div>
+        </footer>
+        <script src="js/script.js"></script>
+    </body>
+</html>

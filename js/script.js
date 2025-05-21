@@ -1,0 +1,276 @@
+let currentTool = 'cursor'; //Domyślnie narzędzie to pędzel
+let isMouseDown = false; //Flaga do śledzenia stanu przycisku myszy
+let startRow = null; //Początkowy wiersz
+let startCol = null; //Początkowa kolumna
+let endRow = null; //Końcowy wiersz
+let endCol = null; //Końcowa kolumna
+let IsIn = null;
+let shiftPressed = false; //Flaga do śledzenia stanu klawisza Shift
+let gridExists = false; //Flaga do śledzenia stanu siatki
+
+document.getElementById('generate').addEventListener('click', generateGrid);
+document.getElementById('reset').addEventListener('click', resetGrid);
+
+function resetGrid() {
+    const coordinatesDisplay = document.getElementById('coordinates');
+    document.querySelector('input[name="tool"][value="cursor"]').checked = true;
+    currentTool = 'cursor';
+    document.querySelector('input[type="checkbox"][id="switch"]').checked = false;
+    document.getElementById('rows').value = 15;
+    document.getElementById('cols').value = 15;
+    coordinatesDisplay.textContent = `( , )`;
+    generateGrid();
+}
+
+// Event listener zmieniający currentTool na podstawie wybranego narzędzia
+document.querySelectorAll('input[name=tool]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        currentTool = e.target.value; // Ustawienie aktualnego narzędzia na wybrane
+    });
+});
+
+// Event listener do sprawdzania, czy myszka jest wciśnięta
+document.addEventListener('mousedown', (e) => {
+    isMouseDown = true;
+});
+
+// Event listener do sprawdzania, czy myszka jest puszczona
+document.addEventListener('mouseup', () => {
+    isMouseDown = false
+    if ((currentTool === 'rectangle' || currentTool === 'rectangle-filled') && startRow !== null && startCol !== null) {
+        applyRectangle(); // Zastosowanie prostokąta
+    }
+});
+
+// Event listener do sprawdzania, czy klawisz Shift jest wciśnięty
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Shift') {
+        shiftPressed = true; // Ustawienie flagi shiftPressed na true
+    }
+});
+
+// Event listener do sprawdzania, czy klawisz Shift jest puszczony
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'Shift') {
+        shiftPressed = false; // Ustawienie flagi shiftPressed na false
+    }
+});
+
+function generateGrid() {
+    const rows = parseInt(document.getElementById('rows').value);
+    const cols = parseInt(document.getElementById('cols').value);
+    const grid = document.getElementById('grid');
+    const coordinatesDisplay = document.getElementById('coordinates');
+    gridExists = true; // Ustawienie flagi siatki na true
+
+    // Clear existing grid
+    grid.innerHTML = '';
+    grid.style.gridTemplateRows = `repeat(${rows + 1}, 40px)`;
+    grid.style.gridTemplateColumns = `repeat(${cols + 1}, 40px)`;
+
+    for (let row = 0; row <= rows; row++) {
+        for (let col = 0; col <= cols; col++) {
+            const cell = document.createElement('div');
+
+            //Lewy górny róg - puste pola
+            if (row === 0 && col === 0) {
+                cell.className = 'header-cell';
+                cell.textContent = '';
+            }
+            
+            // Nagłówki kolumn (górny wiersz)
+            else if (row === 0) {
+                cell.className = 'header-cell';
+                cell.textContent = col;
+            }
+
+            //Nagłówki wierszy (pierwsza kolumna)
+            else if (col === 0) {
+                cell.className = 'header-cell';
+                cell.textContent = row;
+            }
+
+            //Normalne komórki
+            else {
+                cell.className = 'cell';
+                cell.dataset.col = col; // x
+                cell.dataset.row = row; // y
+
+                // Mysz w siatce -> koordynaty
+                cell.addEventListener('mouseenter', (e) => {
+                    IsIn = true;
+                    coordinatesDisplay.textContent = `(${col}, ${row})`;
+                    //console.log(`Mouse entered cell: (${col}, ${row})`);
+                    // Pędzel
+                    if (!isMouseDown) return; // Jeśli myszka nie jest wciśnięta, nie rysuj
+                    if (currentTool === 'brush') {
+                        applyBrush(cell); // Zastosowanie pędzla
+                    }
+                    if (currentTool === 'rectangle' && isMouseDown) {
+                        updateRectanglePreview(cell);
+                    }
+                    if (currentTool === 'rectangle-filled' && isMouseDown) {
+                        updateRectanglePreview(cell);
+                        //console.log(`StartCol = ${startCol}, StartRow = ${startRow}`);
+                    }
+                });
+
+                cell.addEventListener('mousedown', (e) => {
+                    if (e.button !== 0) return; // Sprawdzenie, czy lewy przycisk myszy jest wciśnięty
+                    if (currentTool === 'brush') {
+                        applyBrush(cell); // Zastosowanie pędzla
+                    }
+                    if (currentTool === 'rectangle') {
+                        startRectangleDraw(cell); // Rozpoczęcie rysowania prostokąta
+                        updateRectanglePreview(cell);
+                    }
+                    if (currentTool === 'rectangle-filled') {
+                        startRectangleDraw(cell);
+                        updateRectanglePreview(cell);
+                    }
+                });
+            }
+            grid.appendChild(cell);
+        }
+    }
+    grid.addEventListener('mouseleave', () => {
+        coordinatesDisplay.textContent = `( , )`;
+    });
+}
+
+function clearPreview() {
+    document.querySelectorAll('.cell.preview').forEach(cell => cell.classList.remove('preview'));
+}
+
+function applyBrush(cell) {
+    const eraserMode = document.getElementById('switch').checked;
+
+    if (eraserMode) {
+        cell.classList.remove('active');
+    }
+    else {
+        cell.classList.add('active');
+    }
+}
+
+function startRectangleDraw(cell) {
+    startCol = parseInt(cell.dataset.col);
+    startRow = parseInt(cell.dataset.row);
+    //console.log(`Start drawing rectangle at: (${startCol}, ${startRow})`);
+}
+
+function updateRectanglePreview(cell) {
+    if (!gridExists || startRow === null || startCol === null) return;
+    endCol = parseInt(cell.dataset.col);
+    endRow = parseInt(cell.dataset.row);
+    //console.log(`End drawing rectangle at: (${endCol}, ${endRow})`);
+    clearPreview();
+
+    const cells = calculateRectanglesArea(startCol, startRow, endCol, endRow);
+    cells.forEach(cell => {
+        cell.classList.add('preview');
+    });
+}
+
+function applyRectangle(cell) {
+    const eraserMode = document.getElementById('switch').checked;
+    const cells = calculateRectanglesArea(startCol, startRow, endCol, endRow);
+
+    for (const c of cells) {
+        c.classList.remove('preview');
+        if (eraserMode) c.classList.remove('active');
+        else c.classList.add('active');
+    }
+
+    startRow = startCol = endRow = endCol = null;
+    clearPreview();
+}
+
+function calculateRectanglesArea(c1, r1, c2, r2) {
+    const result = [];
+
+    if (currentTool === 'rectangle-filled') {
+        if (shiftPressed) {
+            const deltaCol = c2 - c1;
+            const deltaRow = r2 - r1;
+            const side = Math.max(Math.abs(deltaCol), Math.abs(deltaRow));
+
+            const endCol = deltaCol >= 0 ? c1 + side : c1 - side;
+            const endRow = deltaRow >= 0 ? r1 + side : r1 - side;
+
+            const minCol = Math.min(c1, endCol);
+            const maxCol = Math.max(c1, endCol);
+            const minRow = Math.min(r1, endRow);
+            const maxRow = Math.max(r1, endRow);
+
+            for (let col = minCol; col <= maxCol; col++) {
+                for (let row = minRow; row <= maxRow; row++) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    if (cell) result.push(cell);
+                }
+            }
+
+            return result;
+        }
+        else {
+            const startCol = Math.min(c1, c2);
+            const endCol = Math.max(c1, c2);
+            const startRow = Math.min(r1, r2);
+            const endRow = Math.max(r1, r2);
+
+            for (let col = startCol; col <= endCol; col++) {
+                for (let row = startRow; row <= endRow; row++) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    if (cell) result.push(cell);
+                }
+            }
+
+            return result;
+        }
+    }
+    else if (currentTool === 'rectangle') {
+        if (shiftPressed) {
+            const deltaCol = c2 - c1;
+            const deltaRow = r2 - r1;
+            const side = Math.max(Math.abs(deltaCol), Math.abs(deltaRow));
+
+            const endCol = deltaCol >= 0 ? c1 + side : c1 - side;
+            const endRow = deltaRow >= 0 ? r1 + side : r1 - side;
+
+            const minCol = Math.min(c1, endCol);
+            const maxCol = Math.max(c1, endCol);
+            const minRow = Math.min(r1, endRow);
+            const maxRow = Math.max(r1, endRow);
+
+            for (let col = minCol; col <= maxCol; col++) {
+                for (let row = minRow; row <= maxRow; row++) {
+                    if (row === minRow || row === maxRow || col === minCol || col === maxCol) {
+                        const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                        if (cell) result.push(cell);
+                    }
+                }
+            }
+
+            return result;
+        }
+        else {
+            const startCol = Math.min(c1, c2);
+            const endCol = Math.max(c1, c2);
+            const startRow = Math.min(r1, r2);
+            const endRow = Math.max(r1, r2);
+
+            console.log(`Start: (${(startCol)}, ${startRow}); End: (${(endCol)}, ${(endRow)})`);
+
+            for (let col = startCol; col <= endCol; col++) {
+                for (let row = startRow; row <= endRow; row++) {
+                    if (row === startRow || row === endRow || col === startCol || col === endCol) {
+                        const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                        if (cell) result.push(cell);
+                    }
+                }
+            }
+
+            return result;
+        }
+    }
+}
