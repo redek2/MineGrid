@@ -22,9 +22,8 @@ function resetGrid() {
     document.getElementById('cols').value = 15;
     circleOptions.style.display = 'none';
     coordinatesDisplay.textContent = `( , )`;
-    cellCount = 0;
-    cellCountDisplay.textContent = `Liczba aktywnych komórek to: ${cellCount}`
     generateGrid();
+    activeCellsCount();
 }
 
 // Event listener zmieniający currentTool na podstawie wybranego narzędzia
