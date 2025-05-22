@@ -113,10 +113,12 @@ function generateGrid() {
     const coordinatesDisplay = document.getElementById('coordinates');
     gridExists = true; // Ustawienie flagi siatki na true
 
+
     // Clear existing grid
     grid.innerHTML = '';
     grid.style.gridTemplateRows = `repeat(${rows + 1}, 40px)`;
     grid.style.gridTemplateColumns = `repeat(${cols + 1}, 40px)`;
+    activeCellsCount();
 
     for (let row = 0; row <= rows; row++) {
         for (let col = 0; col <= cols; col++) {
@@ -323,7 +325,7 @@ function calculateRectanglesArea(c1, r1, c2, r2) {
             const startRow = Math.min(r1, r2);
             const endRow = Math.max(r1, r2);
 
-            console.log(`Start: (${(startCol)}, ${startRow}); End: (${(endCol)}, ${(endRow)})`);
+            //console.log(`Start: (${(startCol)}, ${startRow}); End: (${(endCol)}, ${(endRow)})`);
 
             for (let col = startCol; col <= endCol; col++) {
                 for (let row = startRow; row <= endRow; row++) {
@@ -370,8 +372,36 @@ let x = 0;
 function activeCellsCount() {
     const cellCountDisplay = document.getElementById('cellCount');
     cellCount = 0;
+    let stackString = '';
+    let stackLeftString = '';
     document.querySelectorAll('.cell.active').forEach(cell => {
         cellCount += 1;
     });
-    cellCountDisplay.textContent = `Liczba aktywnych komórek to: ${cellCount}`;
+    stack = cellCount / 64;
+    stack = Math.floor(stack);
+    stackLeft = cellCount % 64;
+    // Poprawny polski
+    stackEnding = stack % 10;
+    stackLeftEnding = stackLeft % 10;
+    if (stack === 1) {
+        stackString = 'stack'
+    }
+    else if (stack === 12 || stack === 13 || stack === 14 || stackEnding === 0 || stackEnding === 1 || stackEnding === 5 || stackEnding === 6 || stackEnding === 7 || stackEnding === 8 || stackEnding === 9) {
+        stackString = 'stacków'
+    }
+    else if (stackEnding === 2 || stackEnding === 3 || stackEnding === 4) {
+        stackString = 'stacki'
+    }
+
+    if (stackLeft === 1) {
+    stackLeftString = 'blok'
+    }
+    else if (stackLeft === 12 || stackLeft === 13 || stackLeft === 14 || stackLeftEnding === 0 || stackLeftEnding === 1 || stackLeftEnding === 5 || stackLeftEnding === 6 || stackLeftEnding === 7 || stackLeftEnding === 8 || stackLeftEnding === 9) {
+        stackLeftString = 'bloków'
+    }
+    else if (stackLeftEnding === 2 || stackLeftEnding === 3 || stackLeftEnding === 4) {
+        stackLeftString = 'bloki'
+    }
+
+    cellCountDisplay.textContent = `Liczba aktywnych komórek to: ${cellCount} lub ${stack} ${stackString} i ${stackLeft} ${stackLeftString}.`;
 }
