@@ -325,7 +325,7 @@ body{
 .cell.preview {
     background-color: rgba(0, 13, 255, 0.5) !important;
     z-index: 99;
-    /*background-image: url(img/cobblestone.png) !important;*/
+    background-image: none;
 }
 
 .cell.rubberPreview {
