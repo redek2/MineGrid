@@ -11,9 +11,7 @@
     <body onload="generateGrid()">
         <header>
             <div class="logo">
-                <a>
-                    <img src="css/img/grass.jpg" alt="Logo" width="70px" height="70px">
-                </a> <!-- Link do strony głównej -->
+                <a><img src="css/img/grass.jpg" alt="Logo" width="70px" height="70px"></a>
             </div>
             <nav>
                 <!-- Odnośniki na zasadzie kotwicy, kierujące do odpowiedniego miejsca w dokumencie oznaczonego tą samą nazwą dla parametru id -->
@@ -36,7 +34,7 @@
             </div>
         </header>
 
-        <h1 style="text-align: center;">Generator siatki</h1>
+        
 
         <div class="container">
             <!-- Sekcja narzędzi -->
@@ -74,25 +72,39 @@
                     <input type="radio" name="tool" value="rectangle-filled">
                     Prostokąt wypełniony
                 </label>
-                <label style="text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-style: none; text-decoration-color: darkred;">
-                    <input type="radio" name="tool" value="circle" disabled>
+                <label>
+                    <input type="radio" name="tool" value="circle">
                     Okrąg
                 </label>
-                <label style="text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-style: none; text-decoration-color: darkred;">
-                    <input type="radio" name="tool" value="circle-filled" disabled>
+                <label>
+                    <input type="radio" name="tool" value="circle-filled">
                     Koło
                 </label>
 
                 <p id="coordinates"></p>
+                <p id="cellCount"></p>
+
+                <div id="circle-options" style="display: none; margin-top: 10px;">
+                    <label for="centerX">Środek X (kolumna):</label>
+                    <input type="number" id="centerX" min="1">
+
+                    <label for="centerY">Środek Y (wiersz):</label>
+                    <input type="number" id="centerY" min="1">
+
+                    <label for="radius">Promień:</label>
+                    <input type="number" id="radius" min="1">
+                    <button id="drawCircleBtn">Rysuj okrąg/koło</button>
+                </div>
              </div>
 
              <!-- Sekcja siatki -->
               <div class="grid-section">
-                <div id="grid" class="grid"></div>
+                <h1 style="text-align: center;">Generator siatki</h1>
+                <div id="grid" class="grid" style="justify-content: center;"></div>
               </div>
         </div>
 
-        <div style="height: 1000px; background-color: yellowgreen;"></div>
+        <div style="height: 100px;"></div>
 
         <footer>
             <div class="stopka">Stopka</div>

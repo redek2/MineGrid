@@ -29,8 +29,9 @@ header{
     gap: 10px;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
+    position: top;
     top: 0;
+    margin-bottom: 10px;
 }
 
 header .logo{
@@ -142,7 +143,7 @@ body{
 }
 
 .tools-section{
-    height: 700px;
+    height: flex;
     width: 250px;
     min-width: 250px;
     padding: 15px;
@@ -279,7 +280,7 @@ body{
 /* Siatka */
 .grid-section{
     flex-grow: 1;
-    display: flex;
+    display: table-column;
     justify-content: center;
     align-items: flex-start;
 }
@@ -318,12 +319,23 @@ body{
 
 .cell.active {
     /*background-color: pink !important;*/
-    background-image: url(img/cobblestone.png) !important;
+    background-image: url(img/cobblestone.png);
 }
 
 .cell.preview {
     background-color: rgba(0, 13, 255, 0.5) !important;
+    z-index: 99;
+    /*background-image: url(img/cobblestone.png) !important;*/
+}
+
+.cell.rubberPreview {
     background-image: none !important;
+    background-color: red !important;
+}
+
+.cell.center {
+    outline: 2px solid red;
+    z-index: 10;
 }
 
 #coordinates {
