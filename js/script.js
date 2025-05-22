@@ -7,6 +7,8 @@ let endCol = null; //Końcowa kolumna
 let IsIn = null;
 let shiftPressed = false; //Flaga do śledzenia stanu klawisza Shift
 let gridExists = false; //Flaga do śledzenia stanu siatki
+let centerCell = null;
+let cellCount = 0;
 
 document.getElementById('generate').addEventListener('click', generateGrid);
 document.getElementById('reset').addEventListener('click', resetGrid);
@@ -18,7 +20,10 @@ function resetGrid() {
     document.querySelector('input[type="checkbox"][id="switch"]').checked = false;
     document.getElementById('rows').value = 15;
     document.getElementById('cols').value = 15;
+    circleOptions.style.display = 'none';
     coordinatesDisplay.textContent = `( , )`;
+    cellCount = 0;
+    cellCountDisplay.textContent = `Liczba aktywnych komórek to: ${cellCount}`
     generateGrid();
 }
 
@@ -26,6 +31,21 @@ function resetGrid() {
 document.querySelectorAll('input[name=tool]').forEach(radio => {
     radio.addEventListener('change', (e) => {
         currentTool = e.target.value; // Ustawienie aktualnego narzędzia na wybrane
+
+        circleOptions = document.getElementById('circle-options');
+        if (currentTool === 'circle' || currentTool === 'circle-filled') {
+            circleOptions.style.display = 'block';
+        }
+        else {
+            circleOptions.style.display = 'none';
+
+            if (centerCell) {
+                centerCell.classList.remove('center');
+                centerCell = null;
+            }
+            document.getElementById('centerX').value = '';
+            document.getElementById('centerY').value = '';
+        }
     });
 });
 
@@ -55,6 +75,37 @@ document.addEventListener('keyup', (e) => {
         shiftPressed = false; // Ustawienie flagi shiftPressed na false
     }
 });
+
+document.getElementById('drawCircleBtn').addEventListener('click', () => {
+    const centerX = parseInt(document.getElementById('centerX').value);
+    const centerY = parseInt(document.getElementById('centerY').value);
+    const radius = parseInt(document.getElementById('radius').value);
+    const eraserMode = document.getElementById('switch').checked;
+
+    if (isNaN(centerX) || isNaN(centerY) || isNaN(radius)) {
+        alert('Wprowadź poprawne wartości środka i promienia');
+        return;
+    }
+
+    // Aktualizacja zaznaczenia center
+    const newCenter = document.querySelector(`.cell[data-col="${centerX}"][data-row="${centerY}"]`);
+    if (newCenter) {
+        if (centerCell && centerCell !== newCenter) {
+            centerCell.classList.remove('center');
+        }
+
+        centerCell = newCenter;
+        centerCell.classList.add('center');
+    }
+
+    const cells = calculateCircleCells(centerX, centerY, radius);
+
+    for (const cell of cells) {
+        if (eraserMode) cell.classList.remove('active');
+        else cell.classList.add('active');
+    }
+    activeCellsCount();
+})
 
 function generateGrid() {
     const rows = parseInt(document.getElementById('rows').value);
@@ -128,6 +179,18 @@ function generateGrid() {
                         startRectangleDraw(cell);
                         updateRectanglePreview(cell);
                     }
+                    if (currentTool === 'circle' || currentTool === 'circle-filled') {
+                        const newCenterCell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                        if (newCenterCell !== centerCell && centerCell !== null) {
+                            centerCell.classList.remove('center');
+                        }
+                        centerCell = newCenterCell;
+                        centerCell.classList.add('center');
+
+
+                        document.getElementById('centerX').value = col;
+                        document.getElementById('centerY').value = row;
+                    }
                 });
             }
             grid.appendChild(cell);
@@ -151,6 +214,7 @@ function applyBrush(cell) {
     else {
         cell.classList.add('active');
     }
+    activeCellsCount();
 }
 
 function startRectangleDraw(cell) {
@@ -184,6 +248,7 @@ function applyRectangle(cell) {
 
     startRow = startCol = endRow = endCol = null;
     clearPreview();
+    activeCellsCount();
 }
 
 function calculateRectanglesArea(c1, r1, c2, r2) {
@@ -273,4 +338,41 @@ function calculateRectanglesArea(c1, r1, c2, r2) {
             return result;
         }
     }
+}
+
+function calculateCircleCells(cx, cy, radius) {
+    const result = [];
+
+    for (let col = cx - radius; col <= cx + radius; col++) {
+        for (let row = cy - radius; row <= cy + radius; row++) {
+            const dx = col - cx;
+            const dy = row -cy;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (currentTool === 'circle-filled') {
+                if (distance <= radius + 0.4) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    if (cell) result.push(cell);
+                }
+            }
+            else if (currentTool === 'circle') {
+                if (distance >= radius - 0.5 && distance <= radius + 0.5) {
+                    const cell = document.querySelector(`.cell[data-col="${col}"][data-row="${row}"]`);
+                    if (cell) result.push(cell)
+                }
+            }
+        }
+    }
+    return result;
+}
+
+let x = 0;
+
+function activeCellsCount() {
+    const cellCountDisplay = document.getElementById('cellCount');
+    cellCount = 0;
+    document.querySelectorAll('.cell.active').forEach(cell => {
+        cellCount += 1;
+    });
+    cellCountDisplay.textContent = `Liczba aktywnych komórek to: ${cellCount}`;
 }
