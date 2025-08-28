@@ -45,3 +45,14 @@ function renderTiles(tiles) {
 
 // wywołanie
 loadTiles();
+
+const selector = document.getElementById("tileSelector");
+
+selector.addEventListener("click", (e) => {
+  // Sprawdzamy, czy kliknięty element (lub jego rodzic) ma klasę .tile-item
+  const tile = e.target.closest(".tile-item");
+  if (tile) {
+    selector.classList.add("hidden"); // chowamy listę
+    console.log("Kliknięto kafelek:", tile.dataset.name); // opcjonalnie: nazwa kafelka
+  }
+});
