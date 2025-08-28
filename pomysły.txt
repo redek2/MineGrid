@@ -1,0 +1,3 @@
+na headerze zrobić podstrony:
+Jedna z nich to będzie klasyczne generowanie siatki ale zamiast klasycznego rysowania będzie tam planowanie linii kolejowych. Tylko najpierw trzeba uwzględnić to w nowym pliku bo z aktualnego folderu z teksturami zostały usunięte tory skręcające.
+Inna podstrona to będzie beltmatic solver i wtedy wjedzie zmiana nazwy całej strony, że nie służy tylko do minehelpera tylko to będzie moja strona

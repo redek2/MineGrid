@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MineGrid</title>
+        <link rel="icon" href="css/img/cobblestoneico.ico">
+        <meta name="descripton" content="Opis dokumentu (max 150 zzs)">
+        <link rel="stylesheet" type="text/css" href="css/blocks.css">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" /><!--Pobranie czcionki fontawesome-->
+    </head>
+    <body onload="generateGrid()">
+        <header>
+            <div class="logo">
+                <a><img src="css/img/grass.jpg" alt="Logo" width="70px" height="70px"></a>
+            </div>
+            <nav>
+                <!-- Odnośniki na zasadzie kotwicy, kierujące do odpowiedniego miejsca w dokumencie oznaczonego tą samą nazwą dla parametru id -->
+                 <!--<a href="#">Start</a>
+                 <a href="#o-nas">O nas</a>
+                 <a href="#cos">Coś innego</a>
+                 <a href="#kontakt">Kontakt</a>-->
+            </nav>
+            <div class="tryb">
+                <i class="fa-solid fa-sun"></i>
+                <i class="fa-solid fa-moon"></i>
+            </div>
+            <div class="social">
+                <a href="https://www.facebook.com/groups/317447829579979/" target="_blank"><!--parametr target z wartością _blank powoduje otwarcie linku w nowej zakładce przeglądarki-->
+                    <i class="fa-brands fa-square-facebook"></i>
+                </a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+            </div>
+        </header>
+
+        
+
+        <div class="container">
+            <!-- Sekcja narzędzi -->
+             <div class="tools-section">
+                <h2>Ustawienia siatki</h2>
+                <label for="rows">Liczba wierszy:</label>
+                <input type="number" id="rows" min="1" max="100" value="15">
+                <label for="cols">Liczba kolumn:</label>
+                <input type="number" id="cols" min="1" max="100" value="15">
+                <button id="generate">Generuj siatkę</button>
+                <button id="reset">Reset</button>
+
+                <h2>Narzędzia</h2>
+                <div style="margin-bottom: 10px; position: relative">
+
+                    <div class="tile-picker">
+                    <button id="toggleTiles">Wybierz kafelek</button>
+                    
+                    <div id="tileSelector" class="tile-selector hidden">
+                        <input type="text" id="searchTile" placeholder="Szukaj kafelka...">
+
+                        <div class="tile-list">
+                        <div class="tile-item" data-name="trawa">
+                            <img src="css/blocks/" alt="Trawa">
+                            <span>Trawa</span>
+                        </div>
+                        <div class="tile-item" data-name="ziemia">
+                            <img src="css/blocks/dirt.png" alt="Ziemia">
+                            <span>Ziemia</span>
+                        </div>
+                        <div class="tile-item" data-name="kamień">
+                            <img src="tiles/stone.png" alt="Kamień">
+                            <span>Kamień</span>
+                        </div>
+                        <!-- kolejne kafelki -->
+                         <div class="tile-item" data-name="trawa">
+                            <img src="tiles/grass.png" alt="Trawa">
+                            <span>Trawa</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+                <div class="switch-container">
+                    <input type="checkbox" id="switch">
+                    <div style="width:2px; height:100%; z-index: 10; background:#000; position:absolute; left:50%; top:0; transform:translateX(-50%);"></div>
+                    <div class="switch-color-right"></div>
+                    <div class="switch-color-left"></div>
+                    <label for="switch"></label>
+                </div>
+                <div style="height: 20px; width: 100%;"></div>
+                <label>
+                    <input type="radio" name="tool" value="cursor" checked>
+                    Kursor
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="brush">
+                    Pędzel
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="rectangle">
+                    Prostokąt
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="rectangle-filled">
+                    Prostokąt wypełniony
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="circle">
+                    Okrąg
+                </label>
+                <label>
+                    <input type="radio" name="tool" value="circle-filled">
+                    Koło
+                </label>
+
+                <p id="coordinates"></p>
+                <p id="cellCount"></p>
+
+                <div id="circle-options" style="display: none; margin-top: 10px;">
+                    <label for="centerX">Środek X (kolumna):</label>
+                    <input type="number" id="centerX" min="1">
+
+                    <label for="centerY">Środek Y (wiersz):</label>
+                    <input type="number" id="centerY" min="1">
+
+                    <label for="radius">Promień:</label>
+                    <input type="number" id="radius" min="1">
+                    <button id="drawCircleBtn">Rysuj okrąg/koło</button>
+                </div>
+             </div>
+
+             <!-- Sekcja siatki -->
+              <div class="grid-section">
+                <h1 style="text-align: center;">Generator siatki</h1>
+                <div id="grid" class="grid" style="justify-content: center;"></div>
+              </div>
+        </div>
+
+        <div style="height: 100px;"></div>
+
+        <footer>
+            <div class="stopka">Stopka</div>
+            <div class="stopka">Stopka</div>
+            <div class="stopka">Stopka</div>
+        </footer>
+        <script src="js/script.js"></script>
+        <script src="js/tiles.js"></script>
+    </body>
+</html>
